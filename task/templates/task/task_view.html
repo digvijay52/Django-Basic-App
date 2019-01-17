@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Display Tasks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <div class='create-task'>
+        <h2>Add a task</h2>
+        <form class ="task-form" action="{% url 'task:taskview' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+        <input type="submit" value="Add Task">    
+        </form>
+    </div>
+    <h1>List</h1>
+    <div class="tasks">
+            {% for task in tasks%}
+            <h2>Title: {{task.title}} </h2>
+            <form class ="delete-form" action="{% url 'task:taskdelete' task.title|stringformat:'s' %}" method="post" >
+                {% csrf_token %}
+                <input type="submit" value="Delete Task">
+            </form>
+            <form class ="subtask-form" action="{% url 'task:addsub' task.title|stringformat:'s' %}" method="post" >
+                {% csrf_token %}
+                {{subforms}}
+            <input type="submit" value="add sub">
+            </form>
+                {%for subtask in subtasks%}
+
+                    {%if subtask.title|stringformat:"s" == task.title|stringformat:"s"%}
+
+                    <h3>{{subtask.subtask}}</h3>
+                    <form class ="subtask-form" action="{% url 'task:subdelete' subtask.subtask|stringformat:'s' subtask.title|stringformat:'s' %}" method="post" >
+                        {% csrf_token %}
+                        <input type="submit" value="Sub Delete">
+                        </form>
+                    {%endif%}
+                {%endfor%}
+            {% endfor%}
+        </div>
+    
+</body>
+</html>
