@@ -21,6 +21,10 @@
     <div class="tasks">
             {% for task in tasks%}
             <h2>Title: {{task.title}} </h2>
+            <form class ="update" action="{% url 'task:taskupdate' task.title|stringformat:'s' %}" method="post" >
+                {% csrf_token %}
+                <input type="submit" value="UPDATE Task">
+            </form>
             <form class ="delete-form" action="{% url 'task:taskdelete' task.title|stringformat:'s' %}" method="post" >
                 {% csrf_token %}
                 <input type="submit" value="Delete Task">

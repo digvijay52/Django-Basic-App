@@ -56,5 +56,22 @@ def task_del(request,tasktitle):
                 task.delete()
                 return redirect('task:taskview')
 
+def task_edit(request,taskedit):
+        if request.method=='POST':
+                form = Task.objects.get(title=taskedit)
+                form = forms.CreateTask(initial={'title':taskedit})
+                return render(request,'task/update.html',{'form':form,'tasktitle':taskedit})
+
+def task_final(request,taskfinal):
+        if request.method=='POST':
+                form =forms.CreateTask(request.POST)
+                if form.is_valid():
+                        tasktitle=form.cleaned_data.get("title")
+                        Task.objects.filter(title=taskfinal).update(title=tasktitle)
+                        return redirect('task:taskview')
+
+                
+                
+
 
 # Create your views here.
